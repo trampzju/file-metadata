@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>file metadata</title>
+<script src="http://cdn.static.runoob.com/libs/jquery/1.10.2/jquery.min.js">
+</script>
+</head>
+
+<body>
+<h3>File Upload:</h3>
+<form action="/fileanalyse" method="post" enctype="multipart/form-data">
+  <input type="file" id="the-file" name="the-file" size="50" style="float:left;"/>
+  <input type="submit" value="Upload" size="50" style="float:left;"/>
+</form>
+
+<script>
+$(document).ready(function() {
+	var files;
+	$('input[type=file]').on('change', function(event) {
+		files = event.target.files;
+		console.log(files);
+	});
+	$('form').on('submit', function(event) {
+		event.stopPropagation();
+		event.preventDefault();
+
+		var data = new FormData();
+		data.append('the-file',files[0]);
+
+		$.ajax({
+			url: window.location.origin + '/fileanalyse',
+			type: 'POST',
+			data: data,
+			cache: false,
+			processData: false,
+			contentType: false,
+			error: function(jqXHR, textStatus, errorThrown) {
+				alert('ERRORS: ' + textStatus);
+			},
+			success: function(data) {
+				alert('FILE SIZE: ' + data);
+			}
+		});
+	});
+});
+</script>
+</body>
+
+</html>
